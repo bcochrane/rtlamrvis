@@ -1,5 +1,6 @@
 import json
-import pprint
+import pandas as pd
+import matplotlib.pyplot as plt
 
 rtlamr_file = "testdata/test.json"
 
@@ -21,5 +22,11 @@ with open(file=rtlamr_file) as rtlamr_f:
             rtlamr_data[ID] = []
         rtlamr_data[ID].append({'Time': Time, 'Consumption': Consumption})
 
-pp = pprint.PrettyPrinter(width=100)
-pp.pprint(rtlamr_data)
+for ID in rtlamr_data:
+    # ID = 32218915
+    print(f'ID: {ID}')
+
+    df = pd.DataFrame(rtlamr_data[ID])
+    df['Time'] = pd.to_datetime(df['Time'])
+    df.plot(x='Time', y='Consumption', marker='o')
+    plt.show()
