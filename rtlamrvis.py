@@ -23,10 +23,14 @@ with open(file=rtlamr_file) as rtlamr_f:
         rtlamr_data[ID].append({'Time': Time, 'Consumption': Consumption})
 
 for ID in rtlamr_data:
-    # ID = 32218915
     print(f'ID: {ID}')
 
     df = pd.DataFrame(rtlamr_data[ID])
     df['Time'] = pd.to_datetime(df['Time'])
-    df.plot(x='Time', y='Consumption', marker='o')
+    df = df.set_index('Time')
+    df['delta'] = df.rolling(window='1h').var()
+
+    # df.plot(y='delta', marker='o')
+    df.plot(y='Consumption')
+    df.plot(kind='bar', y='delta')
     plt.show()
